@@ -1,41 +1,16 @@
 import type { Context, Config } from '@netlify/edge-functions';
 import { getStore, type Store } from '@netlify/blobs';
 
+import { postUploadSnapshot } from '../../routes/postUploadSnapshot.ts';
+import { getSnapshotList } from '../../routes/getSnapshotList.ts';
+
 export default async (request: Request, context: Context) => {
   try {
-    const store: Store = await getStore('my-store');
-
-    const url = new URL(request.url);
-    const key = url.searchParams.get('key');
-
     switch (request.method) {
       case 'POST':
-        if (!key) {
-          return new Response('No key provided', { status: 400 });
-        }
-
-        const body = await request.json();
-        await store.setJSON(key, body);
-        return new Response('Blob successfully stored', { status: 200 });
+        return postUploadSnapshot(request);
       case 'GET':
-        if (!key) {
-          const list = await store.list();
-
-          return new Response(JSON.stringify(list), {
-            status: 200,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-        }
-
-        const value = await store.get(key);
-        return new Response(value, {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        return getSnapshotList();
       default:
         return new Response('Method not allowed', { status: 405 });
     }
