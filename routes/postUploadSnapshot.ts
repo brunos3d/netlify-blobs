@@ -8,6 +8,9 @@ interface SnapshotTemp {
 
 export async function postUploadSnapshot(request: Request) {
   const newSnapshot = (await request.json()) as SnapshotTemp;
+
+  console.log('snapshot', newSnapshot);
+
   const zeSnapshotsStore = getStore('ze_snapshots');
 
   console.log('before setJSON');
