@@ -11,15 +11,20 @@ export default async (request: Request, context: Context) => {
     return new Response('No key provided', { status: 400 });
   }
 
-  switch (request.method) {
-    case 'POST':
-      await store.setJSON(key, request.json());
-      break;
-    case 'GET':
-      const value = await store.get(key);
-      return new Response(JSON.stringify(value), { status: 200 });
-    default:
-      return new Response('Method not allowed', { status: 405 });
+  try {
+    switch (request.method) {
+      case 'POST':
+        const body = await request.json();
+        await store.setJSON(key, body);
+        return new Response('Blob successfully stored', { status: 200 });
+      case 'GET':
+        const value = await store.get(key);
+        return new Response(JSON.stringify(value), { status: 200 });
+      default:
+        return new Response('Method not allowed', { status: 405 });
+    }
+  } catch (e) {
+    return new Response('Error', { status: 500 });
   }
 };
 
