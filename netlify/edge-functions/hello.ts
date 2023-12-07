@@ -8,16 +8,27 @@ export default async (request: Request, context: Context) => {
     const url = new URL(request.url);
     const key = url.searchParams.get('key');
 
-    if (!key) {
-      return new Response('No key provided', { status: 400 });
-    }
-
     switch (request.method) {
       case 'POST':
+        if (!key) {
+          return new Response('No key provided', { status: 400 });
+        }
+
         const body = await request.json();
         await store.setJSON(key, body);
         return new Response('Blob successfully stored', { status: 200 });
       case 'GET':
+        if (!key) {
+          const list = await store.list();
+
+          return new Response(JSON.stringify(list), {
+            status: 200,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+        }
+
         const value = await store.get(key);
         return new Response(value, {
           status: 200,
