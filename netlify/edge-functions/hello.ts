@@ -19,7 +19,12 @@ export default async (request: Request, context: Context) => {
         return new Response('Blob successfully stored', { status: 200 });
       case 'GET':
         const value = await store.get(key);
-        return new Response(JSON.stringify(value), { status: 200 });
+        return new Response(JSON.stringify(value), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
       default:
         return new Response('Method not allowed', { status: 405 });
     }
