@@ -1,16 +1,13 @@
 {
   "name": "netlify-blobs",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "projects/*"
+    ]
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@netlify/blobs": "^6.3.1",
-    "@netlify/edge-functions": "^2.2.0"
-  }
+  "description": "",
+  "scripts": {},
+  "author": "brunos3d",
+  "license": "UNLICENSED"
 }
